@@ -8,6 +8,10 @@ A blazing fast and convenient way to perform Google searches directly from your 
 
 ![image](https://github.com/user-attachments/assets/843cf23a-e8a0-4fe6-a52e-57280caac2b1)
 
+Never have to leave your terminal!
+
+![image](https://github.com/user-attachments/assets/09a71109-e903-45a4-a413-43fd8ade2a5c)
+
 
 ## Features
 
