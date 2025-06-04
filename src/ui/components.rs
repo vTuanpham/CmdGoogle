@@ -17,6 +17,8 @@ pub enum DisplayMode {
     Home,
     Searching,
     Ready,
+    Crawling,
+    Crawled,
 }
 
 #[derive(Default, derive_setters::Setters, Clone)]
@@ -311,6 +313,14 @@ pub fn help_msg(
                 Span::styled("↑/↓", key_style),
                 Span::styled("=", separator_style),
                 Span::styled("scroll", action_style),
+                Span::styled(" | ", separator_style),
+                Span::styled("w", key_style),
+                Span::styled("=", separator_style),
+                Span::styled("crawl", action_style),
+                Span::styled(" | ", separator_style),
+                Span::styled("Esc", key_style),
+                Span::styled("=", separator_style),
+                Span::styled("back", action_style),
             ];
             Line::from(spans)
         }

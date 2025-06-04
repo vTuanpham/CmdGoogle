@@ -16,6 +16,17 @@ pub async fn handle_events(app: &mut App) -> Result<()> {
                     KeyCode::Char('q') => app.should_quit = true,
                     KeyCode::Char('d') => app.toggle_debug_mode(),
                     KeyCode::Char('n') => app.toggle_cache_notification(),
+                    KeyCode::Char('w') => {
+                        if app.display_mode == DisplayMode::Ready {
+                            app.crawl_selected_url().await?;
+                        }
+                    }
+                    KeyCode::Esc => {
+                        if matches!(app.display_mode, DisplayMode::Crawled) {
+                            app.display_mode = DisplayMode::Ready;
+                            app.crawl_content = None;
+                        }
+                    }
                     KeyCode::Up | KeyCode::Char('k') => app.previous_result(),
                     KeyCode::Down | KeyCode::Char('j') => app.next_result(),
                     KeyCode::Char('c') => app.clear_input(),

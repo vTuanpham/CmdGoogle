@@ -27,6 +27,9 @@ Never have to leave your terminal!
     * Use `up` and `down` arrow keys (or `j` and `k`) to select search results.
 * **Open URLs:**
     * Press `o` to open the selected URL in your default web browser.
+* **View Page Content:**
+    * Press `w` to crawl the selected result and display the page content in the terminal.
+    * Press `Esc` while viewing to return to the results list.
 * **Search History:**
     * Access and reuse previous search queries using the `up` and `down` arrow keys in editing mode.
 * **Caching:**
@@ -48,6 +51,8 @@ Never have to leave your terminal!
         * `n`: Toggle cache hit notifications.
         * `up` / `k`: Select the previous search result.
         * `down` / `j`: Select the next search result.
+        * `w`: Crawl and view the selected result.
+        * `Esc`: Return to the results view when crawling.
     * **Editing Mode:**
         * `Enter`: Submit the search query.
         * `Esc`: Return to normal mode.
