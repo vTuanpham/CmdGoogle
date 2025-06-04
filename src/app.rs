@@ -1,5 +1,5 @@
 use crate::data::{cache::Cache, history::History};
-use crate::search::{search_query, QueryArgs, QueryResult};
+use crate::search::{build_http_client, search_query, QueryArgs, QueryResult};
 use crate::ui::{
     components::*,
     crawling,
@@ -190,7 +190,8 @@ impl App {
             self.display_mode = DisplayMode::Crawling;
             self.is_loading = true;
 
-            let resp = reqwest::get(&result.url).await;
+            let client = build_http_client()?;
+            let resp = client.get(&result.url).send().await;
             match resp {
                 Ok(resp) => {
                     let body = resp.text().await.unwrap_or_default();

@@ -41,6 +41,8 @@ Never have to leave your terminal!
     * Enable debug mode with `d` to save the raw HTML of the search results (useful for development).
 * **Google API Option:**
     * Set `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` to perform searches using Google's official API.
+* **Proxy Pool:**
+    * Set `PROXY_POOL` to a comma-separated list of proxy URLs to randomly route requests and avoid bot detection.
 * **Configuration:**
     * Toggle cache hit notifications on/off with `n`.
 * **Keybindings:**
@@ -65,11 +67,6 @@ Never have to leave your terminal!
         * `<type>`: Enter characters for your search query.
         * `Backspace`: Delete the character before the cursor.
 
-## In Progress
-
-* **Easy Crawl Support for In-Terminal Display:**  We are actively working on a feature that will allow you to easily "crawl" websites directly from the search results and display the content within the terminal. This will enable you to quickly view the content of web pages without leaving your terminal. The `Crawl supported` flag currently indicates which URLs *might* be suitable for this feature in the future.
-* **Proxy Pool and Robust Bot Detection Avoidance:** To improve reliability and prevent being blocked by Google's anti-bot systems, we are implementing a proxy pool and more robust bot detection avoidance techniques. This will allow for more consistent and uninterrupted search functionality.
-* **Option to Use the Official Google API:** Set the `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` environment variables to fetch results via Google's official API (roughly 100 free requests per day).
 
 ## Installation
 

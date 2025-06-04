@@ -50,6 +50,25 @@ fn load_api_config() -> Option<ApiConfig> {
     }
 }
 
+fn random_proxy() -> Option<reqwest::Proxy> {
+    let pool = env::var("PROXY_POOL").ok()?;
+    let proxies: Vec<_> = pool
+        .split(',')
+        .map(|s| s.trim())
+        .filter(|s| !s.is_empty())
+        .collect();
+    let proxy_url = proxies.choose(&mut thread_rng())?;
+    reqwest::Proxy::all(*proxy_url).ok()
+}
+
+pub fn build_http_client() -> Result<reqwest::Client> {
+    let mut builder = reqwest::Client::builder();
+    if let Some(proxy) = random_proxy() {
+        builder = builder.proxy(proxy);
+    }
+    Ok(builder.build()?)
+}
+
 pub async fn search_query(args: QueryArgs) -> Result<Vec<QueryResult>> {
     let start = Instant::now();
     let results = if let Some(cfg) = load_api_config() {
@@ -105,7 +124,7 @@ async fn search_query_scrape(args: &QueryArgs) -> Result<Vec<QueryResult>> {
         "Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
     ];
     let random_user_agent = user_agents.choose(&mut thread_rng()).unwrap();
-    let client = reqwest::Client::builder().build()?;
+    let client = build_http_client()?;
     let resp = client
         .get(&search_url)
         .header("User-Agent", *random_user_agent)
