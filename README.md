@@ -27,6 +27,9 @@ Never have to leave your terminal!
     * Use `up` and `down` arrow keys (or `j` and `k`) to select search results.
 * **Open URLs:**
     * Press `o` to open the selected URL in your default web browser.
+* **View Page Content:**
+    * Press `w` to crawl the selected result and display the page content in the terminal.
+    * Press `Esc` while viewing to return to the results list.
 * **Search History:**
     * Access and reuse previous search queries using the `up` and `down` arrow keys in editing mode.
 * **Caching:**
@@ -36,6 +39,10 @@ Never have to leave your terminal!
     * Press `c` to clear the current search results and the search input.
 * **Debug Mode:**
     * Enable debug mode with `d` to save the raw HTML of the search results (useful for development).
+* **Google API Option:**
+    * Set `GOOGLE_API_KEY` and `GOOGLE_CSE_ID` to perform searches using Google's official API.
+* **Proxy Pool:**
+    * Set `PROXY_POOL` to a comma-separated list of proxy URLs to randomly route requests and avoid bot detection.
 * **Configuration:**
     * Toggle cache hit notifications on/off with `n`.
 * **Keybindings:**
@@ -48,6 +55,8 @@ Never have to leave your terminal!
         * `n`: Toggle cache hit notifications.
         * `up` / `k`: Select the previous search result.
         * `down` / `j`: Select the next search result.
+        * `w`: Crawl and view the selected result.
+        * `Esc`: Return to the results view when crawling.
     * **Editing Mode:**
         * `Enter`: Submit the search query.
         * `Esc`: Return to normal mode.
@@ -58,11 +67,6 @@ Never have to leave your terminal!
         * `<type>`: Enter characters for your search query.
         * `Backspace`: Delete the character before the cursor.
 
-## In Progress
-
-* **Easy Crawl Support for In-Terminal Display:**  We are actively working on a feature that will allow you to easily "crawl" websites directly from the search results and display the content within the terminal. This will enable you to quickly view the content of web pages without leaving your terminal. The `Crawl supported` flag currently indicates which URLs *might* be suitable for this feature in the future.
-* **Proxy Pool and Robust Bot Detection Avoidance:** To improve reliability and prevent being blocked by Google's anti-bot systems, we are implementing a proxy pool and more robust bot detection avoidance techniques. This will allow for more consistent and uninterrupted search functionality.
-* **Option to Use the Official Google API:** We plan to add an option to utilize the official Google Search API. This will provide a more legitimate and structured way to access search results, although it may come with limitations (such as the API's free tier of approximately 100 requests per day). This option will likely require API key configuration.
 
 ## Installation
 

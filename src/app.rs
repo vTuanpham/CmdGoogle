@@ -1,6 +1,15 @@
 use crate::data::{cache::Cache, history::History};
-use crate::search::{search_query, QueryArgs, QueryResult};
-use crate::ui::{components::*, home, ready, searching, DisplayMode, InputMode};
+use crate::search::{build_http_client, search_query, QueryArgs, QueryResult};
+use crate::ui::{
+    components::*,
+    crawling,
+    home,
+    ready,
+    searching,
+    viewing,
+    DisplayMode,
+    InputMode,
+};
 use crate::utils::StringExt;
 use color_eyre::Result;
 use ratatui::{widgets::ListState, Frame};
@@ -22,6 +31,7 @@ pub struct App {
     pub results_list_state: ListState,
     pub history_list_state: ListState,
     pub should_quit: bool,
+    pub crawl_content: Option<String>,
     pub cache: Cache,
     pub history: History,
 }
@@ -47,6 +57,7 @@ impl App {
             results_list_state: ListState::default(),
             history_list_state: ListState::default(),
             should_quit: false,
+            crawl_content: None,
             cache,
             history,
         })
@@ -174,6 +185,30 @@ impl App {
         Ok(())
     }
 
+    pub async fn crawl_selected_url(&mut self) -> Result<()> {
+        if let Some(result) = self.messages.get(self.selected_idx) {
+            self.display_mode = DisplayMode::Crawling;
+            self.is_loading = true;
+
+            let client = build_http_client()?;
+            let resp = client.get(&result.url).send().await;
+            match resp {
+                Ok(resp) => {
+                    let body = resp.text().await.unwrap_or_default();
+                    self.crawl_content = Some(extract_text(&body));
+                }
+                Err(e) => {
+                    self.error_message = Some(format!("{}", e));
+                    self.crawl_content = None;
+                }
+            }
+
+            self.is_loading = false;
+            self.display_mode = DisplayMode::Crawled;
+        }
+        Ok(())
+    }
+
     pub fn next_history(&mut self) {
         self.history.next();
         self.history_list_state.select(Some(self.history.index));
@@ -209,6 +244,15 @@ impl App {
                 }
                 searching::render(self, frame)
             }
+            DisplayMode::Crawling => {
+                if self.is_loading {
+                    self.spinner_index = (self.spinner_index + 1) % self.spinner_frames.len();
+                }
+                crawling::render(self, frame);
+            }
+            DisplayMode::Crawled => {
+                viewing::render(self, frame);
+            }
             DisplayMode::Ready => {
                 ready::render(self, frame);
                 if let Some(err_msg) = &self.error_message {
@@ -232,6 +276,7 @@ impl App {
         self.cursor_idx = 0;
         self.cache.cache_hit = false;
         self.has_entered = false;
+        self.crawl_content = None;
         self.display_mode = DisplayMode::Home;
         self.input_mode = InputMode::Editing;
     }
@@ -256,4 +301,14 @@ impl App {
         self.input_mode = InputMode::Normal;
         self.history.show_history_popup = false;
     }
+}
+
+fn extract_text(html: &str) -> String {
+    use scraper::{Html, Selector};
+    let doc = Html::parse_document(html);
+    let selector = Selector::parse("body").unwrap();
+    doc.select(&selector)
+        .next()
+        .map(|b| b.text().collect::<Vec<_>>().join(" "))
+        .unwrap_or_default()
 }
